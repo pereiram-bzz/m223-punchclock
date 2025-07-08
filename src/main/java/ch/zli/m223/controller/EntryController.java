@@ -54,10 +54,10 @@ public class EntryController {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)   
-    @Operation(summary = "Deletes an entry.", description = "Deletes an entry and only returns an error status code in case of failure.")
+    @Operation(summary = "Updates an entry.", description = "Updates an entry and only returns an error status code in case of failure.")
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id) {
-       return entryService.updateEntry(id);
+    public Response update(@PathParam("id") Long id, Entry updatedEntry) {
+       return entryService.updateEntry(id, updatedEntry);
     }
 
 }
