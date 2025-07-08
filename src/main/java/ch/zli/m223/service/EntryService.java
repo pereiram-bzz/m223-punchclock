@@ -6,6 +6,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.reactive.RestResponse;
 
 import ch.zli.m223.model.Entry;
 
@@ -24,4 +27,26 @@ public class EntryService {
         var query = entityManager.createQuery("FROM Entry", Entry.class);
         return query.getResultList();
     }
+
+    @Transactional
+    public Response deleteEntry(Long id) {
+        try {
+            var entity = entityManager.find(Entry.class, id);
+            entityManager.remove(entity);
+        } catch(Exception e) {
+            return Response.status(404).build();
+        }
+        return Response.noContent().build();
+    } 
+
+    @Transactional
+    public Response updateEntry(Long id) {
+        try {
+            var entity = entityManager.find(Entry.class, id);
+            entityManager.merge(entity);
+        } catch(Exception e) {
+            return Response.status(404).build();
+        }
+        return Response.noContent().build();
+    } 
 }
