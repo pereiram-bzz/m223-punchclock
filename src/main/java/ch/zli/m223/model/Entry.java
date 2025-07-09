@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDateTime;
@@ -23,10 +24,17 @@ public class Entry {
   @Column(nullable = false)
   private LocalDateTime checkOut;
 
-  @ManyToOne()
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  @JsonBackReference("user-entries")
+  private User user;
+
+  @ManyToOne
   @JoinColumn(name = "category_id")
-  @JsonManagedReference
+  @JsonBackReference("category-entries")
   private Category category;
+
+
 
   @ManyToMany
   @JoinTable(
@@ -76,5 +84,11 @@ public class Entry {
     this.tags = tags;
   }
 
-  
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
 }

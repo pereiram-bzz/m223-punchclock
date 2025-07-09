@@ -7,6 +7,7 @@ import javax.persistence.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Category {
@@ -19,8 +20,10 @@ public class Category {
   private String title;
 
   @OneToMany(mappedBy = "category")
-  @JsonBackReference
+  @JsonManagedReference("category-entries")
   private Set<Entry> entries;
+
+
 
   public Long getId() {
     return id;
