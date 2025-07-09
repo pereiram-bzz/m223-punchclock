@@ -4,6 +4,8 @@ import javax.persistence.*;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +24,8 @@ public class Entry {
   private LocalDateTime checkOut;
 
   @ManyToOne()
+  @JoinColumn(name = "category_id")
+  @JsonManagedReference
   private Category category;
 
   @ManyToMany

@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ModelTag {
   @Id
@@ -18,6 +20,7 @@ public class ModelTag {
   private String title;
 
   @ManyToMany(mappedBy = "tags")
+  @JsonIgnore
   private Set<Entry> entries = new HashSet<>();
 
   public Long getId() {
