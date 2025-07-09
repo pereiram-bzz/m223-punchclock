@@ -8,28 +8,28 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
-import ch.zli.m223.model.Entry;
+import ch.zli.m223.model.Category;
 
 @ApplicationScoped
-public class EntryService {
+public class CategoryService {
     @Inject
     private EntityManager entityManager;
 
     @Transactional
-    public Entry createEntry(Entry entry) {
-        entityManager.persist(entry);
-        return entry;
+    public Category createCategory(Category category) {
+        entityManager.persist(category);
+        return category;
     }
 
-    public List<Entry> findAll() {
-        var query = entityManager.createQuery("FROM Entry", Entry.class);
+    public List<Category> findAll() {
+        var query = entityManager.createQuery("FROM Category", Category.class);
         return query.getResultList();
     }
 
     @Transactional
-    public Response deleteEntry(Long id) {
+    public Response deleteCategory(Long id) {
         try {
-            var entity = entityManager.find(Entry.class, id);
+            var entity = entityManager.find(Category.class, id);
             entityManager.remove(entity);
         } catch(Exception e) {
             return Response.status(404).build();
@@ -38,11 +38,10 @@ public class EntryService {
     } 
 
     @Transactional
-    public Response updateEntry(Long id, Entry updatedEntry) {
+    public Response updateCategory(Long id, Category updatedCategory) {
         try {
-            var entity = entityManager.find(Entry.class, id);
-            entity.setCheckIn(updatedEntry.getCheckIn());
-            entity.setCheckOut(updatedEntry.getCheckOut());
+            var entity = entityManager.find(Category.class, id);
+            entity.setTitle(updatedCategory.getTitle());
         } catch(Exception e) {
             return Response.status(404).build();
         }

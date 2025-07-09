@@ -8,28 +8,28 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 
-import ch.zli.m223.model.Entry;
+import ch.zli.m223.model.ModelTag;
 
 @ApplicationScoped
-public class EntryService {
+public class TagService {
     @Inject
     private EntityManager entityManager;
 
     @Transactional
-    public Entry createEntry(Entry entry) {
-        entityManager.persist(entry);
-        return entry;
+    public ModelTag createTag(ModelTag tag) {
+        entityManager.persist(tag);
+        return tag;
     }
 
-    public List<Entry> findAll() {
-        var query = entityManager.createQuery("FROM Entry", Entry.class);
+    public List<ModelTag> findAll() {
+        var query = entityManager.createQuery("FROM Tag", ModelTag.class);
         return query.getResultList();
     }
 
     @Transactional
-    public Response deleteEntry(Long id) {
+    public Response deleteTag(Long id) {
         try {
-            var entity = entityManager.find(Entry.class, id);
+            var entity = entityManager.find(ModelTag.class, id);
             entityManager.remove(entity);
         } catch(Exception e) {
             return Response.status(404).build();
@@ -38,11 +38,10 @@ public class EntryService {
     } 
 
     @Transactional
-    public Response updateEntry(Long id, Entry updatedEntry) {
+    public Response updateTag(Long id, ModelTag updatedTag) {
         try {
-            var entity = entityManager.find(Entry.class, id);
-            entity.setCheckIn(updatedEntry.getCheckIn());
-            entity.setCheckOut(updatedEntry.getCheckOut());
+            var entity = entityManager.find(ModelTag.class, id);
+            entity.setTitle(updatedTag.getTitle());
         } catch(Exception e) {
             return Response.status(404).build();
         }
