@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import ch.zli.m223.model.Category;
 import ch.zli.m223.model.Entry;
 import ch.zli.m223.model.ModelTag;
+import ch.zli.m223.model.User;
 import io.quarkus.runtime.StartupEvent;
 
 @ApplicationScoped
@@ -37,7 +38,7 @@ public class DataSeeder {
             return category;
     }
 
-    public void createTestEntry(LocalDateTime checkIn, LocalDateTime checkOut, Category category, Set<ModelTag> tags) {
+    public Entry createTestEntry(LocalDateTime checkIn, LocalDateTime checkOut, Category category, Set<ModelTag> tags) {
             var entry = new Entry();
             entry.setCheckIn(checkIn);
             entry.setCheckOut(checkOut);
@@ -45,7 +46,24 @@ public class DataSeeder {
             entry.setTags(tags);
             entityManager.persist(entry);
             System.out.print("Created testEntry");
+            return entry;
     }
+
+    public User createTestUser(String username, String role, Set<Entry> entries) {
+        var user = new User();
+        user.setUsername(username);
+        user.setRole(role);
+
+        for (Entry entry : entries) {
+                entry.setUser(user);
+        }
+
+        user.setEntries(entries);
+        entityManager.persist(user);
+        System.out.print("Created testUser");
+        return user;
+    }
+
 
     @Transactional
     public void onStart(@Observes StartupEvent event) {
@@ -64,7 +82,11 @@ public class DataSeeder {
         tags1.add(projY);
         tags2.add(projY);
         tags2.add(projZ);
-        createTestEntry(time1, time2, catA, tags1);
-        createTestEntry(time3, time4, catB, tags2);
+        var entry1 = createTestEntry(time1, time2, catA, tags1);
+        var entry2 = createTestEntry(time3, time4, catB, tags2);
+        Set<Entry> entryList = new HashSet<Entry>();
+        entryList.add(entry1);
+        entryList.add(entry2);
+        createTestUser("Joe", "Admin", entryList);
     }
 }
